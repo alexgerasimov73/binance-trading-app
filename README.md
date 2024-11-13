@@ -21,6 +21,10 @@
 
 This project is structured with a focus on scalability and maintainability. All API requests and WebSocket interactions are managed within Redux slices, and components are optimized for reusability and testing.
 
+## Demo
+
+You can open demo on [GitHub Pages](https://alexgerasimov73.github.io/binance-trading-app/).
+
 ### Prerequisites
 
 - **Node.js** v16 or later
