@@ -1,0 +1,12 @@
+@layer reset, base, tokens, recipes, utilities;
+
+h1,
+h2,
+th,
+td,
+div {
+  &::selection {
+    background-color: #2d47d6;
+    color: #ffffff;
+  }
+}
