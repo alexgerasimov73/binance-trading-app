@@ -1,21 +1,22 @@
 import { memo } from 'react';
 import { Table } from '~/components/ui/table';
 import { SymbolsTableCell } from './SymbolsTableCell';
-import { useGetSymbolPrices } from '../hooks/useGetSymbolPrices';
+import { TickerInfo } from '../types/types';
+import { getSymbolPrices } from '~/utils/getSymbolPrices';
 
 interface Props {
-  readonly symbol: string;
+  readonly symbol: TickerInfo;
 }
 
 export const SymbolsTableRow = memo(({ symbol }: Props) => {
-  const { askPrice, bidPrice, isLoading, spread } = useGetSymbolPrices(symbol);
+  const { askPrice, bidPrice, spread } = getSymbolPrices(symbol);
 
   return (
-    <Table.Row cursor="pointer" datatype={symbol}>
-      <SymbolsTableCell fontWeight="semibold" isLoading={isLoading} value={symbol} />
-      <SymbolsTableCell isLoading={isLoading} value={bidPrice} />
-      <SymbolsTableCell isLoading={isLoading} value={askPrice} />
-      <SymbolsTableCell isLoading={isLoading} value={spread} />
+    <Table.Row cursor="pointer" datatype={symbol.symbol}>
+      <SymbolsTableCell fontWeight="semibold" isLoading={false} value={symbol.symbol} />
+      <SymbolsTableCell isLoading={false} value={bidPrice} />
+      <SymbolsTableCell isLoading={false} value={askPrice} />
+      <SymbolsTableCell isLoading={false} value={spread} />
     </Table.Row>
   );
 });

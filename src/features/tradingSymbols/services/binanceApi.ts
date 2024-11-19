@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { setupWebSocket } from '~/utils/webSocketUtil';
 import { handleWebSocketError } from '~/utils/errorHandlers';
+import { transformArrayToURLEncoded } from '~/utils/transformArrayToURLEncoded';
 import type { ExchangeInfoResponse, SymbolInfo, TickerInfo } from '../types/types';
 import { API_URL, BINANCE_API } from '~/utils/constants';
 
@@ -21,27 +22,37 @@ export const binanceApi = createApi({
             status: symbol.status,
           })),
     }),
-    getTickerStream: build.query<TickerInfo, string>({
-      query: (symbol) => `${API_URL.BOOK_TICKER_URL}${symbol}`,
+    getTickersStream: build.query<TickerInfo[], string[]>({
+      query: (symbols) => {
+        const bookTickersUrl = transformArrayToURLEncoded(symbols);
+        return `${API_URL.BOOK_TICKER_URL}${bookTickersUrl}`;
+      },
       keepUnusedDataFor: 10,
       onCacheEntryAdded: async (
-        symbol,
+        symbols,
         { updateCachedData, cacheDataLoaded, cacheEntryRemoved },
       ) => {
-        const ws = setupWebSocket(
-          `wss://stream.binance.com:443/ws/${symbol.toLowerCase()}@bookTicker`,
-        );
+        const bookTickersUrl = symbols
+          .map((symbol) => `${symbol.toLowerCase()}@bookTicker`)
+          .join('/');
+
+        const ws = setupWebSocket(`wss://stream.binance.com:443/stream?streams=${bookTickersUrl}`);
 
         try {
           await cacheDataLoaded;
 
           ws.onmessage = (event) => {
-            const messageData = JSON.parse(event.data);
+            const { data } = JSON.parse(event.data);
 
-            if (messageData && messageData.s === symbol) {
-              updateCachedData((drift) => {
-                drift.bidPrice = messageData.b;
-                drift.askPrice = messageData.a;
+            if (data) {
+              const symbol = data.s;
+
+              updateCachedData((draft) => {
+                const index = draft.findIndex((item) => item.symbol === symbol);
+                if (index !== -1) {
+                  draft[index].bidPrice = data.b;
+                  draft[index].askPrice = data.a;
+                }
               });
             }
           };
@@ -56,4 +67,4 @@ export const binanceApi = createApi({
   }),
 });
 
-export const { useGetExchangeInfoQuery, useGetTickerStreamQuery } = binanceApi;
+export const { useGetExchangeInfoQuery, useGetTickersStreamQuery } = binanceApi;

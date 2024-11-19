@@ -3,7 +3,7 @@ import { LoadingTableRow } from '~/components/LoadingTableRow';
 import { Pagination } from '~/components/ui/pagination';
 import { Table } from '~/components/ui/table';
 import { SymbolOrderTypesModal } from './SymbolOrderTypesModal';
-import { SymbolsTableRow } from './SymbolsTableRow';
+import { SymbolsTableContent } from './SymbolsTableContent';
 import { usePaginatedSymbols } from '../hooks/usePaginatedSymbols';
 import type { SymbolInfo } from '../types/types';
 import { PAGE_SIZE } from '~/utils/constants';
@@ -39,13 +39,13 @@ export const SymbolsTable = () => {
           </Table.Row>
         </Table.Head>
         <Table.Body color="textColor" onClick={handleOpenModal}>
-          {isLoading || !currentSymbols
-            ? Array.from({ length: PAGE_SIZE }).map((_, index) => (
-                <LoadingTableRow key={index} columnCount={4} />
-              ))
-            : currentSymbols.map((symbol) => (
-                <SymbolsTableRow key={symbol.symbol} symbol={symbol.symbol} />
-              ))}
+          {isLoading || !currentSymbols ? (
+            Array.from({ length: PAGE_SIZE }).map((_, index) => (
+              <LoadingTableRow key={index} columnCount={4} />
+            ))
+          ) : (
+            <SymbolsTableContent symbols={currentSymbols} />
+          )}
         </Table.Body>
       </Table.Root>
 
