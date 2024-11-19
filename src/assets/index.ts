@@ -1,3 +1,3 @@
-import FPWhite from './fp-white.svg';
+import LogoIcon from './logo.svg';
 
-export { FPWhite };
+export { LogoIcon };

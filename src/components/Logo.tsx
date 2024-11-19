@@ -1,10 +1,10 @@
 import { css } from 'styled-system/css';
 import { HStack } from 'styled-system/jsx';
-import { FPWhite } from '~/assets';
+import { LogoIcon } from '~/assets';
 
 export const Logo = () => (
-  <HStack alignItems="center" gap={3}>
-    <img className={css({ h: '6', pb: '0.5' })} alt="" src={FPWhite} />
+  <HStack alignItems="center" gap={2}>
+    <img className={css({ h: '8', pb: '2' })} alt="" src={LogoIcon} />
     <span
       className={css({
         fontSize: 'lg',
