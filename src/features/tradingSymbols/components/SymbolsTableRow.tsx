@@ -13,10 +13,10 @@ export const SymbolsTableRow = memo(({ symbol }: Props) => {
 
   return (
     <Table.Row cursor="pointer" datatype={symbol.symbol}>
-      <SymbolsTableCell fontWeight="semibold" isLoading={false} value={symbol.symbol} />
-      <SymbolsTableCell isLoading={false} value={bidPrice} />
-      <SymbolsTableCell isLoading={false} value={askPrice} />
-      <SymbolsTableCell isLoading={false} value={spread} />
+      <SymbolsTableCell fontWeight="semibold" value={symbol.symbol} />
+      <SymbolsTableCell value={bidPrice} />
+      <SymbolsTableCell value={askPrice} />
+      <SymbolsTableCell value={spread} />
     </Table.Row>
   );
 });

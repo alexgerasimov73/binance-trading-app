@@ -3,7 +3,7 @@ import { SymbolInfo } from '../types/types';
 
 export const useGetTickers = (symbols: SymbolInfo[]) => {
   const symbolTitles = symbols.map((symbol) => symbol.symbol);
-  const { data } = useGetTickersStreamQuery(symbolTitles);
+  const { data, isLoading } = useGetTickersStreamQuery(symbolTitles);
 
-  return { data };
+  return { data, isLoading };
 };
