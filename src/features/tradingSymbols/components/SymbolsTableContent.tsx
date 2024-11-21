@@ -8,9 +8,9 @@ interface Props {
 }
 
 export const SymbolsTableContent = ({ symbols }: Props) => {
-  const { data, isLoading } = useGetTickers(symbols);
+  const { isLoading } = useGetTickers(symbols);
 
   if (isLoading) return <SymbolsTableSkeleton />;
 
-  return data && data.map((symbol) => <SymbolsTableRow key={symbol.symbol} symbol={symbol} />);
+  return symbols.map((symbol) => <SymbolsTableRow key={symbol.symbol} symbol={symbol.symbol} />);
 };

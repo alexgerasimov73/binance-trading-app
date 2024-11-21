@@ -4,14 +4,15 @@ import { handleWebSocketError } from '~/utils/errorHandlers';
 import { transformArrayToURLEncoded } from '~/utils/transformArrayToURLEncoded';
 import type { ExchangeInfoResponse, SymbolInfo, TickerInfo } from '../types/types';
 import { API_URL, BINANCE_API } from '~/utils/constants';
+import { setSymbols, updateSymbol } from '../symbolsSlices';
 
 export const binanceApi = createApi({
   reducerPath: BINANCE_API,
   baseQuery: fetchBaseQuery({
     baseUrl: API_URL.BASE_URL,
   }),
-  endpoints: (build) => ({
-    getExchangeInfo: build.query<SymbolInfo[], void>({
+  endpoints: (builder) => ({
+    getExchangeInfo: builder.query<SymbolInfo[], void>({
       query: () => API_URL.EXCHANGE_INFO_URL,
       transformResponse: (response: ExchangeInfoResponse) =>
         response.symbols
@@ -22,16 +23,22 @@ export const binanceApi = createApi({
             status: symbol.status,
           })),
     }),
-    getTickersStream: build.query<TickerInfo[], string[]>({
+    getTickersStream: builder.query<TickerInfo[], string[]>({
       query: (symbols) => {
         const bookTickersUrl = transformArrayToURLEncoded(symbols);
         return `${API_URL.BOOK_TICKER_URL}${bookTickersUrl}`;
       },
       keepUnusedDataFor: 10,
-      onCacheEntryAdded: async (
-        symbols,
-        { updateCachedData, cacheDataLoaded, cacheEntryRemoved },
-      ) => {
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        try {
+          const { data } = await queryFulfilled;
+
+          dispatch(setSymbols(data));
+        } catch (error) {
+          console.error(error);
+        }
+      },
+      onCacheEntryAdded: async (symbols, { dispatch, cacheDataLoaded, cacheEntryRemoved }) => {
         const bookTickersUrl = symbols
           .map((symbol) => `${symbol.toLowerCase()}@bookTicker`)
           .join('/');
@@ -45,15 +52,9 @@ export const binanceApi = createApi({
             const { data } = JSON.parse(event.data);
 
             if (data) {
-              const symbol = data.s;
+              const { s: symbol, b: bidPrice, a: askPrice } = data;
 
-              updateCachedData((draft) => {
-                const index = draft.findIndex((item) => item.symbol === symbol);
-                if (index !== -1) {
-                  draft[index].bidPrice = data.b;
-                  draft[index].askPrice = data.a;
-                }
-              });
+              dispatch(updateSymbol({ symbol, bidPrice, askPrice }));
             }
           };
         } catch (error) {

@@ -1,10 +1,12 @@
 import Big from 'big.js';
-import { TickerInfo } from '~/features/tradingSymbols/types/types';
+import { useAppSelector } from '~/hooks/appHooks';
 
-export const getSymbolPrices = (symbol: TickerInfo) => {
-  const askPrice = Big(symbol.askPrice).toFixed();
-  const bidPrice = Big(symbol.bidPrice).toFixed();
-  const spread = Big(symbol.askPrice).minus(Big(symbol.bidPrice)).toFixed();
+export const getSymbolPrices = (symbol: string) => {
+  const data = useAppSelector((state) => state.symbols[symbol]);
+
+  const askPrice = Big(data?.askPrice).toFixed();
+  const bidPrice = Big(data?.bidPrice).toFixed();
+  const spread = Big(data?.askPrice).minus(Big(data?.bidPrice)).toFixed();
 
   return { askPrice, bidPrice, spread };
 };
