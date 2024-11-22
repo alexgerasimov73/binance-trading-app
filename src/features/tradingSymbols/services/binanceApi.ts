@@ -28,7 +28,7 @@ export const binanceApi = createApi({
         const bookTickersUrl = transformArrayToURLEncoded(symbols);
         return `${API_URL.BOOK_TICKER_URL}${bookTickersUrl}`;
       },
-      keepUnusedDataFor: 10,
+      keepUnusedDataFor: 1,
       onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
         try {
           const { data } = await queryFulfilled;
