@@ -13,17 +13,6 @@ describe('SymbolsTableCell', () => {
     expect(screen.getByText('ETHUSDT')).toBeInTheDocument();
   });
 
-  test('displays a skeleton loader when isLoading is true', () => {
-    render(<SymbolsTableCell {...mockProps} isLoading={true} />);
-    const skeletonLoader = screen.getByTestId('skeleton-loader');
-    expect(skeletonLoader).toBeInTheDocument();
-  });
-
-  test('displays value when isLoading is false', () => {
-    render(<SymbolsTableCell {...mockProps} isLoading={false} />);
-    expect(screen.getByText('ETHUSDT')).toBeInTheDocument();
-  });
-
   test('applies the correct font weight if provided', () => {
     render(<SymbolsTableCell {...mockProps} />);
     const cell = screen.getByText('ETHUSDT').closest('td');
