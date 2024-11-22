@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { setupWebSocket } from '~/utils/webSocketUtil';
-import { handleWebSocketError } from '~/utils/errorHandlers';
+import { handleError } from '~/utils/errorHandlers';
 import { transformArrayToURLEncoded } from '~/utils/transformArrayToURLEncoded';
 import type { ExchangeInfoResponse, SymbolInfo, TickerInfo } from '../types/types';
 import { API_URL, BINANCE_API } from '~/utils/constants';
@@ -35,7 +35,7 @@ export const binanceApi = createApi({
 
           dispatch(setSymbols(data));
         } catch (error) {
-          console.error(error);
+          handleError(error);
         }
       },
       onCacheEntryAdded: async (symbols, { dispatch, cacheDataLoaded, cacheEntryRemoved }) => {
@@ -58,7 +58,7 @@ export const binanceApi = createApi({
             }
           };
         } catch (error) {
-          handleWebSocketError(error);
+          handleError(error);
         }
 
         await cacheEntryRemoved;

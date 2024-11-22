@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
-import { SymbolsTableCell } from '../SymbolsTableCell';
+import { TableCell } from '../TableCell';
 
-describe('SymbolsTableCell', () => {
+describe('TableCell', () => {
   const mockProps = {
     fontWeight: 'semibold',
     isLoading: false,
@@ -9,18 +9,18 @@ describe('SymbolsTableCell', () => {
   };
 
   test('renders without errors and displays symbol names correctly', () => {
-    render(<SymbolsTableCell {...mockProps} />);
+    render(<TableCell {...mockProps} />);
     expect(screen.getByText('ETHUSDT')).toBeInTheDocument();
   });
 
   test('applies the correct font weight if provided', () => {
-    render(<SymbolsTableCell {...mockProps} />);
+    render(<TableCell {...mockProps} />);
     const cell = screen.getByText('ETHUSDT').closest('td');
     expect(cell).toHaveClass('fw_semibold');
   });
 
   test('renders an empty string if value is empty', () => {
-    render(<SymbolsTableCell {...mockProps} value="" />);
+    render(<TableCell {...mockProps} value="" />);
     expect(screen.queryByText('ETHUSDT')).not.toBeInTheDocument();
   });
 });

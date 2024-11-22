@@ -6,6 +6,6 @@ interface Props {
   readonly value: string;
 }
 
-export const SymbolsTableCell = memo(({ fontWeight, value }: Props) => (
+export const TableCell = memo(({ fontWeight, value }: Props) => (
   <Table.Cell fontWeight={fontWeight}>{value}</Table.Cell>
 ));

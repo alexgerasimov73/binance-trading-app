@@ -1,9 +1,9 @@
 import { type MouseEvent, useState } from 'react';
 import { Pagination } from '~/components/ui/pagination';
 import { Table } from '~/components/ui/table';
-import { SymbolOrderTypesModal } from './SymbolOrderTypesModal';
-import { SymbolsTableContent } from './SymbolsTableContent';
-import { SymbolsTableSkeleton } from './SymbolsTableSkeleton';
+import { OrderTypesModal } from './OrderTypesModal';
+import { TableContent } from './TableContent';
+import { TableSkeleton } from './TableSkeleton';
 import { usePaginatedSymbols } from '../hooks/usePaginatedSymbols';
 import type { SymbolInfo } from '../types/types';
 import { PAGE_SIZE } from '~/utils/constants';
@@ -40,9 +40,9 @@ export const SymbolsTable = () => {
         </Table.Head>
         <Table.Body color="textColor" onClick={handleOpenModal}>
           {isLoading || !currentSymbols ? (
-            <SymbolsTableSkeleton />
+            <TableSkeleton />
           ) : (
-            <SymbolsTableContent symbols={currentSymbols} />
+            <TableContent symbols={currentSymbols} />
           )}
         </Table.Body>
       </Table.Root>
@@ -57,11 +57,7 @@ export const SymbolsTable = () => {
       />
 
       {clickedSymbol && (
-        <SymbolOrderTypesModal
-          clickedSymbol={clickedSymbol}
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-        />
+        <OrderTypesModal clickedSymbol={clickedSymbol} isOpen={isOpen} setIsOpen={setIsOpen} />
       )}
     </>
   );

@@ -10,7 +10,7 @@ interface Props {
   readonly setIsOpen: (isOpen: boolean) => void;
 }
 
-export const SymbolOrderTypesModal = ({ clickedSymbol, isOpen, setIsOpen }: Props) => (
+export const OrderTypesModal = ({ clickedSymbol, isOpen, setIsOpen }: Props) => (
   <Dialog.Root open={isOpen} onOpenChange={(e) => setIsOpen(e.open)}>
     <Portal>
       <Dialog.Backdrop />
